@@ -8,9 +8,7 @@ function App() {
     <div>
       <Header />
       <Container maxWidth="sm">
-        <div>
-          <h1> This is content</h1>
-        </div>
+          <h1> This is content</h1>    
       </Container>
     </div>
   );
