@@ -27,3 +27,12 @@ body,
 .text {
   color: white;
 }
+
+.paper-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 200px;
+  width: 150px;
+}
