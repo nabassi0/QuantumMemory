@@ -4,7 +4,9 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
@@ -20,12 +22,6 @@ html, body, #root {
 .main-content {
   flex: 1;
   padding-top: 20px;
-}
-
-.content {
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  border-radius: 8px;
 }
 
 .text {

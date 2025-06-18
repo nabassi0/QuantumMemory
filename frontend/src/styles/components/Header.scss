@@ -1,16 +1,21 @@
 .header {
-    width: 100%;
-    height: 70px;
-    background-color: #8B5DFF;
-    display: flex;
-    align-items: center;
+  width: 100%;
+  height: 70px;
+  background-color: #901e3e;
+  display: flex;
+  align-items: center;
 }
 
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 35px;
-    padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  padding: 10px;
+}
+
+.background-image {
+  width: 200px;
+  height: 120px;
 }
