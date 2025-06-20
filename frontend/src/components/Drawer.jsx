@@ -11,6 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
+import "../styles/components/Drawer.scss";
 
 export default function TemporaryDrawer() {
   const [open, setOpen] = React.useState(false);
@@ -50,7 +51,14 @@ export default function TemporaryDrawer() {
   );
 
   return (
-    <div>
+    <div className="drawer-container">
+      {/* Button to open the drawer */}
+      <Button variant="contained" disabled>
+        Best
+      </Button>
+      <Button variant="contained" disabled>
+        Score 0
+      </Button>
       <Button onClick={toggleDrawer(true)} variant="outlined">
         <MenuIcon />
       </Button>
