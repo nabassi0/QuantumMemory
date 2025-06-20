@@ -51,11 +51,9 @@ export default function TemporaryDrawer() {
 
   return (
     <div>
-      <Button
-        onClick={toggleDrawer(true)}
-        variant="outlined"
-        startIcon={MenuIcon}
-      ></Button>
+      <Button onClick={toggleDrawer(true)} variant="outlined">
+        <MenuIcon />
+      </Button>
       <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
