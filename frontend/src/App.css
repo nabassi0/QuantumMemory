@@ -30,9 +30,11 @@ body,
 
 .paper-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
+}
+
+.paper-container > :not(style) {
+  margin: 8px;
+  width: 200px;
   height: 200px;
-  width: 150px;
 }

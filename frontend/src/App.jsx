@@ -23,9 +23,12 @@ function App() {
       <div className="app">
         <Header />
         <main className="main-content">
-          <Box className="paper-container">
-            <Paper elevation={0} />
-            <Paper />
+          <Box className="paper-container" >
+            <Paper elevation={3} />
+            <Paper elevation={3} />
+            <Paper elevation={3} />
+            <Paper elevation={3} />
+            <Paper elevation={3} />
             <Paper elevation={3} />
           </Box>
         </main>
