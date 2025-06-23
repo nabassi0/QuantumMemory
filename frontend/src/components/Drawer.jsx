@@ -53,13 +53,13 @@ export default function TemporaryDrawer() {
   return (
     <div className="drawer-container">
       {/* Button to open the drawer */}
-      <Button variant="contained" disabled>
+      <Button variant="contained" disabled sx={{ borderRadius: "15px"}}>
         Best
       </Button>
-      <Button variant="contained" disabled>
+      <Button variant="contained" disabled sx={{ borderRadius: "15px"}}>
         Score 0
       </Button>
-      <Button onClick={toggleDrawer(true)} variant="outlined">
+      <Button onClick={toggleDrawer(true)} variant="outlined" sx={{ color: "white", borderRadius: "15px", borderColor: "white", borderWidth: "1.5px" }}>
         <MenuIcon />
       </Button>
       <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
