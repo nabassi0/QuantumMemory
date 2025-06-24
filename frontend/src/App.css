@@ -22,6 +22,9 @@ body,
 .main-content {
   flex: 1;
   padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .text {
@@ -29,12 +32,20 @@ body,
 }
 
 .paper-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));  /* Taille min 150px, max flexible */
+  grid-template-rows: repeat(3, minmax(150px, 1fr));     /* Taille min 150px, max flexible */
+  gap: min(2vw, 10px);  /* Gap adaptatif : 2% de la largeur d'écran, max 20px */
+  justify-content: center;
+  max-width: 90vw;      /* Maximum 90% de la largeur d'écran */
+  aspect-ratio: 1;      /* Garde un ratio carré */
 }
 
 .paper-container > :not(style) {
-  margin: 8px;
-  width: 200px;
-  height: 200px;
+  width: 100%;   /* Prend toute la cellule */
+  height: 100%;  /* Prend toute la cellule */
+}
+
+.paper-item {
+  background-image: url("./assets/images/Snow.png");
 }

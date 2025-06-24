@@ -18,18 +18,17 @@ function App() {
     },
   });
 
+  const Papers = Array.from({ length: 9 }, (_, index) => (
+    <Paper key={index} elevation={3} className="paper-item" />
+  ));
+
   return (
     <ThemeProvider theme={theme}>
       <div className="app">
         <Header />
         <main className="main-content">
           <Box className="paper-container" >
-            <Paper elevation={3} />
-            <Paper elevation={3} />
-            <Paper elevation={3} />
-            <Paper elevation={3} />
-            <Paper elevation={3} />
-            <Paper elevation={3} />
+            {Papers}
           </Box>
         </main>
       </div>

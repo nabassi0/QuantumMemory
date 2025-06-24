@@ -2,6 +2,7 @@
 # An object of Flask class is our WSGI application.
 from flask import Flask, jsonify
 from flask_cors import CORS
+from quantum_functions import QuantumFunctions
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
@@ -19,6 +20,14 @@ def hello_world():
 @app.route('/api/hello')
 def hello():
     return jsonify({'message': 'Hello World from APIII'})
+
+@app.route('/api/generate-sequence')
+def generate_sequence():
+    length = request.args.get('length', 1, type=int)
+    grid_size = request.args.get('grid_size', 9, type=int)
+    
+    sequence = sim.GenerateSequence(length, grid_size)
+    return jsonify({'sequence': sequence})
 
 # main driver function
 if __name__ == '__main__':
