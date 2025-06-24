@@ -6,8 +6,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-function App() {
-  // État du jeu de mémoire quantique
+function App() {  // État du jeu de mémoire quantique
   const [gameState, setGameState] = useState({
     level: 1,                    // Niveau actuel (1-5)
     sublevel: 1,                 // Sous-niveau actuel (1-5)
@@ -18,10 +17,10 @@ function App() {
     score: 0,                    // Score du joueur
     gameStarted: false,          // Jeu lancé ou non
     isWaitingForPlayer: false,   // Attend que le joueur clique
-    revealedCards: []            // Cartes actuellement révélées
-  });
-
-  // Fonction pour démarrer une nouvelle partie
+    revealedCards: [],           // Cartes actuellement révélées
+    lives: 10,                   // Nombre de vies restantes
+    maxLives: 10                 // Nombre maximum de vies
+  });  // Fonction pour démarrer une nouvelle partie
   const startGame = () => {
     setGameState(prev => ({
       ...prev,
@@ -34,14 +33,21 @@ function App() {
       isShowingSequence: false,
       currentStep: 0,
       isWaitingForPlayer: false,
-      revealedCards: []
+      revealedCards: [],
+      lives: 10,                 // Reset des vies
+      maxLives: 10
     }));
-  };
-  // Fonction pour générer une nouvelle séquence (appel API)
-  const generateNewSequence = async () => {
+    
+    // Génère automatiquement la première séquence
+    setTimeout(() => {
+      generateNewSequence();
+    }, 500);
+  };  // Fonction pour générer une nouvelle séquence (appel API)
+  const generateNewSequence = async (level = gameState.level, sublevel = gameState.sublevel) => {
     try {
+      console.log(`Génération séquence pour Niveau ${level}, Sous-niveau ${sublevel}`);
       const response = await fetch(
-        `http://localhost:5000/api/generate-sequence?level=${gameState.level}&sublevel=${gameState.sublevel}`
+        `http://localhost:5000/api/generate-sequence?level=${level}&sublevel=${sublevel}`
       );
       const data = await response.json();
       
@@ -94,13 +100,130 @@ function App() {
       }, step * 1500); // Délai entre chaque carte
     });
   };
-
   // Fonction pour gérer les clics du joueur sur les cartes
   const handleCardClick = (cardIndex) => {
     if (!gameState.isWaitingForPlayer) return;
     
-    // Logique de validation sera ajoutée ici
     console.log("Carte cliquée:", cardIndex);
+    console.log("Séquence attendue:", gameState.sequence);
+    console.log("Séquence joueur:", [...gameState.playerSequence, cardIndex]);
+    
+    // Ajoute la carte cliquée à la séquence du joueur
+    const newPlayerSequence = [...gameState.playerSequence, cardIndex];
+    const currentStep = newPlayerSequence.length - 1;
+    
+    // Vérifie si le clic est correct
+    const isCorrect = gameState.sequence[currentStep] === cardIndex;
+    
+    if (isCorrect) {
+      // Révèle temporairement la carte cliquée (feedback positif)
+      setGameState(prev => ({
+        ...prev,
+        playerSequence: newPlayerSequence,
+        revealedCards: [cardIndex]
+      }));
+      
+      // Cache la carte après 500ms
+      setTimeout(() => {
+        setGameState(prev => ({
+          ...prev,
+          revealedCards: []
+        }));
+      }, 500);
+      
+      // Vérifie si la séquence est complète
+      if (newPlayerSequence.length === gameState.sequence.length) {
+        // Séquence réussie !
+        setTimeout(() => {
+          handleLevelComplete();
+        }, 700);
+      }    } else {
+      // Mauvaise carte - Perd une vie
+      const newLives = gameState.lives - 1;
+      console.log(`Mauvaise carte ! La bonne était ${gameState.sequence[currentStep]}. Vies restantes: ${newLives}`);
+      
+      if (newLives <= 0) {
+        // Game Over - Plus de vies
+        console.log("Game Over ! Plus de vies restantes.");
+        resetGame();
+      } else {
+        // Continue avec une vie en moins
+        setGameState(prev => ({
+          ...prev,
+          lives: newLives,
+          playerSequence: [],
+          revealedCards: [],
+          isWaitingForPlayer: false,
+          isShowingSequence: false
+        }));
+        
+        // Relance la même séquence après une courte pause
+        setTimeout(() => {
+          showSequenceToPlayer(gameState.sequence);
+        }, 1500);
+      }
+    }
+  };
+    // Fonction appelée quand un sous-niveau est réussi
+  const handleLevelComplete = () => {
+    const newScore = gameState.score + (gameState.level * gameState.sublevel * 10);
+    
+    if (gameState.sublevel < 5) {
+      // Passe au sous-niveau suivant
+      setGameState(prev => ({
+        ...prev,
+        sublevel: prev.sublevel + 1,
+        score: newScore,
+        sequence: [],
+        playerSequence: [],
+        isWaitingForPlayer: false,
+        isShowingSequence: false
+      }));      console.log(`Sous-niveau ${gameState.sublevel} réussi ! Score: ${newScore}`);
+      
+      // Génère automatiquement la séquence suivante avec les nouveaux paramètres
+      setTimeout(() => {
+        generateNewSequence(gameState.level, gameState.sublevel + 1);
+      }, 1000);
+    } else {
+      // Sous-niveau 5 terminé, passe au niveau suivant
+      if (gameState.level < 5) {
+        setGameState(prev => ({
+          ...prev,
+          level: prev.level + 1,
+          sublevel: 5, // Garde le sous-niveau 5 au lieu de reset à 1
+          score: newScore,
+          sequence: [],
+          playerSequence: [],
+          isWaitingForPlayer: false,
+          isShowingSequence: false
+        }));        console.log(`🎉 Niveau ${gameState.level} terminé ! Passage au niveau ${gameState.level + 1}. Nouvelle grille ${getGridDimensions(gameState.level + 1)}x${getGridDimensions(gameState.level + 1)}. Garde 5 cartes. Score: ${newScore}`);
+        
+        // Génère automatiquement la séquence du nouveau niveau avec 5 cartes
+        setTimeout(() => {
+          generateNewSequence(gameState.level + 1, 5);
+        }, 2000);
+      } else {        // Jeu terminé !
+        console.log(`🎉 FÉLICITATIONS ! Jeu terminé ! Score final: ${newScore}`);
+        resetGame();
+      }
+    }
+  };
+    // Fonction pour reset le jeu
+  const resetGame = () => {
+    setGameState({
+      level: 1,
+      sublevel: 1,
+      sequence: [],
+      playerSequence: [],
+      isShowingSequence: false,
+      currentStep: 0,
+      score: 0,
+      gameStarted: false,
+      isWaitingForPlayer: false,
+      revealedCards: [],
+      lives: 10,
+      maxLives: 10
+    });
   };
 
   const theme = createTheme({
@@ -112,11 +235,25 @@ function App() {
         contrastText: "#242105",
       },
     },
-  });
-  // Génération des cartes avec gestion des clics et animations
-  const Papers = Array.from({ length: 9 }, (_, index) => (
+  });  // Génération des cartes avec grille dynamique selon le niveau
+  const getGridSize = (level) => {
+    const gridSizes = {1: 9, 2: 16, 3: 25, 4: 36, 5: 49};
+    return gridSizes[level] || 9;
+  };
+  
+  const getGridDimensions = (level) => {
+    const dimensions = {1: 3, 2: 4, 3: 5, 4: 6, 5: 7};
+    return dimensions[level] || 3;
+  };
+  
+  const currentGridSize = getGridSize(gameState.level);
+  const currentGridDimension = getGridDimensions(gameState.level);
+  
+  console.log(`Niveau actuel: ${gameState.level}, Grille: ${currentGridDimension}x${currentGridDimension} (${currentGridSize} cartes)`);
+  
+  const Papers = Array.from({ length: currentGridSize }, (_, index) => (
     <Paper 
-      key={index} 
+      key={`${gameState.level}-${index}`} // Key unique pour forcer le re-render
       elevation={3} 
       className={`paper-item ${gameState.revealedCards.includes(index) ? 'revealed' : ''}`}
       onClick={() => handleCardClick(index)}
@@ -134,9 +271,14 @@ function App() {
           gameState={gameState}
           onStartGame={startGame}
           onGenerateSequence={generateNewSequence}
-        />
-        <main className="main-content">
-          <Box className="paper-container">
+        />        <main className="main-content">
+          <Box 
+            className="paper-container"
+            style={{
+              gridTemplateColumns: `repeat(${currentGridDimension}, minmax(150px, 1fr))`,
+              gridTemplateRows: `repeat(${currentGridDimension}, minmax(150px, 1fr))`
+            }}
+          >
             {Papers}
           </Box>
         </main>

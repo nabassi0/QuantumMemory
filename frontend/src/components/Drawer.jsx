@@ -8,8 +8,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import ScoreIcon from "@mui/icons-material/Score";
+import LevelIcon from "@mui/icons-material/Layers";
+import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import MenuIcon from "@mui/icons-material/Menu";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
@@ -52,7 +54,7 @@ export default function TemporaryDrawer({ gameState, onStartGame, onGenerateSequ
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <InboxIcon />
+              <ScoreIcon />
             </ListItemIcon>
             <ListItemText primary={`Score: ${gameState.score}`} />
           </ListItemButton>
@@ -61,7 +63,7 @@ export default function TemporaryDrawer({ gameState, onStartGame, onGenerateSequ
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <LevelIcon />
             </ListItemIcon>
             <ListItemText primary={`Niveau: ${gameState.level}`} />
           </ListItemButton>
@@ -70,17 +72,30 @@ export default function TemporaryDrawer({ gameState, onStartGame, onGenerateSequ
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <InboxIcon />
+              <SubdirectoryArrowRightIcon />
             </ListItemIcon>
             <ListItemText primary={`Sous-niveau: ${gameState.sublevel}`} />
+          </ListItemButton>
+        </ListItem>
+        
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FavoriteIcon style={{ color: gameState.lives <= 3 ? '#f44336' : gameState.lives <= 6 ? '#ff9800' : '#e91e63' }} />
+            </ListItemIcon>
+            <ListItemText 
+              primary={`Vies: ${gameState.lives}/10`}
+              style={{ 
+                color: gameState.lives <= 3 ? '#f44336' : gameState.lives <= 6 ? '#ff9800' : 'inherit'
+              }}
+            />
           </ListItemButton>
         </ListItem>
       </List>
     </Box>
   );
 
-  return (
-    <div className="drawer-container">
+  return (    <div className="drawer-container">
       {/* Boutons avec vraies valeurs */}
       <Button variant="contained" disabled sx={{ borderRadius: "15px"}}>
         Score: {gameState.score}
@@ -90,6 +105,16 @@ export default function TemporaryDrawer({ gameState, onStartGame, onGenerateSequ
       </Button>
       <Button variant="contained" disabled sx={{ borderRadius: "15px"}}>
         Sous-niveau: {gameState.sublevel}
+      </Button>
+      <Button 
+        variant="contained" 
+        disabled 
+        sx={{ 
+          borderRadius: "15px",
+          backgroundColor: gameState.lives <= 3 ? '#f44336' : gameState.lives <= 6 ? '#ff9800' : '#4caf50'
+        }}
+      >
+        Vies: {gameState.lives}/10
       </Button>
       <Button onClick={toggleDrawer(true)} variant="outlined" sx={{ color: "white", borderRadius: "15px", borderColor: "white", borderWidth: "1.5px" }}>
         <MenuIcon />
