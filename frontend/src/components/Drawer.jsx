@@ -11,9 +11,11 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
 import "../styles/components/Drawer.scss";
 
-export default function TemporaryDrawer() {
+export default function TemporaryDrawer({ gameState, onStartGame, onGenerateSequence }) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
@@ -23,41 +25,71 @@ export default function TemporaryDrawer() {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        <ListItem disablePadding>
+          <ListItemButton onClick={onStartGame}>
+            <ListItemIcon>
+              <PlayArrowIcon />
+            </ListItemIcon>
+            <ListItemText primary="Nouvelle Partie" />
+          </ListItemButton>
+        </ListItem>
+        
+        {gameState.gameStarted && (
+          <ListItem disablePadding>
+            <ListItemButton onClick={onGenerateSequence}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <ShuffleIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary="Générer Séquence" />
             </ListItemButton>
           </ListItem>
-        ))}
+        )}
       </List>
+      
       <Divider />
+      
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={`Score: ${gameState.score}`} />
+          </ListItemButton>
+        </ListItem>
+        
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary={`Niveau: ${gameState.level}`} />
+          </ListItemButton>
+        </ListItem>
+        
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={`Sous-niveau: ${gameState.sublevel}`} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
 
   return (
     <div className="drawer-container">
-      {/* Button to open the drawer */}
+      {/* Boutons avec vraies valeurs */}
       <Button variant="contained" disabled sx={{ borderRadius: "15px"}}>
-        Niveau
+        Score: {gameState.score}
       </Button>
       <Button variant="contained" disabled sx={{ borderRadius: "15px"}}>
-        Sous-niveau
+        Niveau: {gameState.level}
+      </Button>
+      <Button variant="contained" disabled sx={{ borderRadius: "15px"}}>
+        Sous-niveau: {gameState.sublevel}
       </Button>
       <Button onClick={toggleDrawer(true)} variant="outlined" sx={{ color: "white", borderRadius: "15px", borderColor: "white", borderWidth: "1.5px" }}>
         <MenuIcon />

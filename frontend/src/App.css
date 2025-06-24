@@ -46,6 +46,33 @@ body,
   height: 100%;  /* Prend toute la cellule */
 }
 
+/* Animation flip pour les cartes */
 .paper-item {
   background-image: url("./assets/images/Snow.png");
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+  cursor: pointer;
+}
+
+.paper-item.flipped {
+  transform: rotateY(180deg);
+}
+
+.paper-item.revealed {
+  background-color: #4CAF50;
+  background-image: none;
+}
+
+.paper-item.revealed::after {
+  content: attr(data-index);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateY(180deg);
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
 }
