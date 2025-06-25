@@ -12,7 +12,7 @@ CORS(app)
 # which tells the application which URL should call 
 # the associated function.
 @app.route('/')
-# ‘/’ URL is bound with hello_world() function.
+# '/' URL is bound with hello_world() function.
 def hello_world():
     return 'Hello World'
 
@@ -22,32 +22,34 @@ def hello():
 
 @app.route('/api/generate-sequence')
 def generate_sequence():
-    # Import de la classe depuis le notebook
-    from quantum_functions import QuantumCircuitSimulator
-    
-    # Créer une instance du simulateur
-    sim = QuantumCircuitSimulator()
-    
-    length = request.args.get('length', 1, type=int)
-    grid_size = request.args.get('grid_size', 9, type=int)
-    
-    # Utilise la fonction pour générer la séquence selon le jeu
-    if request.args.get('level') and request.args.get('sublevel'):
-        level = request.args.get('level', 1, type=int)
-        sublevel = request.args.get('sublevel', 1, type=int)
-        sequence = sim.GenerateSequenceForGame(level, sublevel)
-    else:
-        # Fallback vers la fonction basique
-        sequence = []
-        for _ in range(length):
-            card_index = sim.GenerateCardIndex(grid_size)
-            sequence.append(card_index)
-    
-    return jsonify({'sequence': sequence})
+    try:
+        # Import de la classe depuis le notebook
+        from quantum_functions import QuantumCircuitSimulator
+        
+        # Créer une instance du simulateur
+        sim = QuantumCircuitSimulator()
+        
+        length = request.args.get('length', 1, type=int)
+        grid_size = request.args.get('grid_size', 9, type=int)
+        
+        # Utilise la fonction pour générer la séquence selon le jeu
+        if request.args.get('level') and request.args.get('sublevel'):
+            level = request.args.get('level', 1, type=int)
+            sublevel = request.args.get('sublevel', 1, type=int)
+            sequence = sim.GenerateSequenceForGame(level, sublevel)
+        else:
+            # Fallback vers la fonction basique
+            sequence = []
+            for _ in range(length):
+                card_index = sim.GenerateCardIndex(grid_size)
+                sequence.append(card_index)
+        
+        return jsonify({'sequence': sequence})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # main driver function
 if __name__ == '__main__':
-
     # run() method of Flask class runs the application 
     # on the local development server.
-    app.run()
+    app.run(debug=True, host='0.0.0.0', port=5000)
