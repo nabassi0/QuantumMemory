@@ -17,9 +17,10 @@ class QuantumCircuitSimulator:
 
         return int(list(counts.keys())[0])
     
+    
     def DistributionTest(self, num_shots=1000):
         results = []
-        for _ in range(num_shots):
+        for _ in range(num_shots): # le _ signifie qu'on utilise pas i, donc par convention on met _
             bit = self.QuantumBitGenerator()
             results.append(str(bit))
     
