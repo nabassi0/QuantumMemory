@@ -39,11 +39,11 @@ function App() {
       maxLives: 10,
     }));
 
-    // Génère automatiquement la première séquence
+    // va générer automatiquement la première séquence
     setTimeout(() => {
       generateNewSequence();
     }, 500);
-  }; // Fonction pour générer une nouvelle séquence (appel API)
+  }; // la fonction pour générer une nv sequence via appel d'api
   const generateNewSequence = async (
     level = gameState.level,
     sublevel = gameState.sublevel
@@ -66,17 +66,17 @@ function App() {
         revealedCards: [],
       }));
 
-      // Démarre l'affichage de la séquence
+      // sémarre l'affichage de la séquence
       showSequenceToPlayer(data.sequence);
     } catch (error) {
       console.error("Erreur lors de la génération de séquence:", error);
     }
   };
-  // Fonction pour afficher la séquence au joueur
+  // la fonction pour afficher la séquence au joueur
   const showSequenceToPlayer = (sequence) => {
     console.log("Séquence à afficher:", sequence);
 
-    // Affiche chaque carte de la séquence avec un délai
+    // va affiche chaque carte de la séquence avec un délai
     sequence.forEach((cardIndex, step) => {
       setTimeout(() => {
         // Révèle la carte
@@ -85,7 +85,7 @@ function App() {
           revealedCards: [...prev.revealedCards, cardIndex],
         }));
 
-        // Cache la carte après 1 seconde
+        // cache la carte après 1 seconde
         setTimeout(() => {
           setGameState((prev) => ({
             ...prev,
@@ -94,7 +94,7 @@ function App() {
             ),
           }));
 
-          // Si c'est la dernière carte, passe en mode joueur
+          // si c'est la dernière carte, passe en mode joueur
           if (step === sequence.length - 1) {
             setTimeout(() => {
               setGameState((prev) => ({
@@ -108,7 +108,7 @@ function App() {
       }, step * 1500); // Délai entre chaque carte
     });
   };
-  // Fonction pour gérer les clics du joueur sur les cartes
+  // celle la, fonction pour gérer les clics du joueur sur les cartes
   const handleCardClick = (cardIndex) => {
     if (!gameState.isWaitingForPlayer) return;
 
@@ -116,15 +116,15 @@ function App() {
     console.log("Séquence attendue:", gameState.sequence);
     console.log("Séquence joueur:", [...gameState.playerSequence, cardIndex]);
 
-    // Ajoute la carte cliquée à la séquence du joueur
+    // va ajoute la carte cliquée à la séquence du joueur
     const newPlayerSequence = [...gameState.playerSequence, cardIndex];
     const currentStep = newPlayerSequence.length - 1;
 
-    // Vérifie si le clic est correct
+    // on vérifie si le clic est correct
     const isCorrect = gameState.sequence[currentStep] === cardIndex;
 
     if (isCorrect) {
-      // Révèle temporairement la carte cliquée (feedback positif)
+      // on va révèler temporairement la carte cliquée (feedback positif)
       setGameState((prev) => ({
         ...prev,
         playerSequence: newPlayerSequence,
@@ -147,18 +147,18 @@ function App() {
         }, 700);
       }
     } else {
-      // Mauvaise carte - Perd une vie
+      // mauvaise carte - Perd une vie
       const newLives = gameState.lives - 1;
       console.log(
         `Mauvaise carte ! La bonne était ${gameState.sequence[currentStep]}. Vies restantes: ${newLives}`
       );
 
       if (newLives <= 0) {
-        // Game Over - Plus de vies
+        // game Over - Plus de vies
         console.log("Game Over ! Plus de vies restantes.");
         resetGame();
       } else {
-        // Continue avec une vie en moins
+        // on continue avec une vie en moins
         setGameState((prev) => ({
           ...prev,
           lives: newLives,
@@ -168,14 +168,14 @@ function App() {
           isShowingSequence: false,
         }));
 
-        // Relance la même séquence après une courte pause
+        // relance la même séquence après une courte pause
         setTimeout(() => {
           showSequenceToPlayer(gameState.sequence);
         }, 1500);
       }
     }
   };
-  // Fonction appelée quand un sous-niveau est réussi
+  // fonction appelée quand un sous-niveau est réussi
   const handleLevelComplete = () => {
     const newScore =
       gameState.score + gameState.level * gameState.sublevel * 10;
@@ -235,7 +235,7 @@ function App() {
       }
     }
   };
-  // Fonction pour reset le jeu
+  // fonction pour reset le jeu
   const resetGame = () => {
     setGameState({
       level: 1,

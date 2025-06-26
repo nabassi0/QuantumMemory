@@ -28,7 +28,7 @@ class QuantumCircuitSimulator:
         print(counts)
         plot_histogram(counts)
 
-    # Génère un inde de carte aléatoire pour le jeu
+    # Génère un index de carte aléatoire pour le jeu
     def GenerateCardIndex(self, grid_size):
         # Combine plusieurs bits quantiques pour avoir plus de 0 et 1
         result = 0
@@ -47,7 +47,7 @@ class QuantumCircuitSimulator:
         grid_size = grid_sizes.get(level, 9) # si trouve pas le niveau, on retourne 3x3 taille de grille par défaut
         
         # calcul de la sequence expliquée
-        # Formule: (level-1) * 5 + sublevel
+        # la formule: (level-1) * 5 + sublevel
         # Niveau 1: 1,2,3,4,5 cartes | Niveau 2: 6,7,8,9,10 cartes | etc.
         sequence_length = (level - 1) * 5 + sublevel
         
