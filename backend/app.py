@@ -38,7 +38,7 @@ def generate_sequence():
             sublevel = request.args.get('sublevel', 1, type=int)
             sequence = sim.GenerateSequenceForGame(level, sublevel)
         else:
-            # Fallback vers la fonction basique
+            # fallback sur la fonction basique
             sequence = []
             for _ in range(length):
                 card_index = sim.GenerateCardIndex(grid_size)

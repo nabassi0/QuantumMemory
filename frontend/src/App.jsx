@@ -205,7 +205,7 @@ function App() {
         setGameState((prev) => ({
           ...prev,
           level: prev.level + 1,
-          sublevel: 5, // Garde le sous-niveau 5 au lieu de reset à 1
+          sublevel: 1, // ✅ Reset au sous-niveau 1 pour le nouveau niveau
           score: newScore,
           sequence: [],
           playerSequence: [],
@@ -219,12 +219,12 @@ function App() {
             gameState.level + 1
           )}x${getGridDimensions(
             gameState.level + 1
-          )}. Garde 5 cartes. Score: ${newScore}`
+          )}. Retour au sous-niveau 1. Score: ${newScore}`
         );
 
-        // Génère automatiquement la séquence du nouveau niveau avec 5 cartes
+        // Génère automatiquement la séquence du nouveau niveau avec sous-niveau 1
         setTimeout(() => {
-          generateNewSequence(gameState.level + 1, 5);
+          generateNewSequence(gameState.level + 1, 1);
         }, 2000);
       } else {
         // Jeu terminé !
